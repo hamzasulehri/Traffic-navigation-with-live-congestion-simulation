@@ -6,6 +6,7 @@ import history.Route;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.image.BufferedImage;
 
 public class MainFrame extends JFrame {
     private JTextField nameField;
@@ -17,11 +18,14 @@ public class MainFrame extends JFrame {
 
     public MainFrame() {
 
-        setTitle("Smart Traffic Navigation System");
+        setTitle("🚦 Smart Traffic Navigation System");
         setSize(1300,800);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setLayout(new BorderLayout());
+
+        // Set a simple generated window icon (no external image file needed)
+        setIconImage(createAppIcon());
 
         // GRAPH
         graph = new CityGraph();
@@ -85,7 +89,7 @@ public class MainFrame extends JFrame {
                     if(route == null) {
 
                         infoPanel.setStatus(
-                                "No Route Found"
+                                "⚠ No Route Found"
                         );
 
                         return;
@@ -105,11 +109,11 @@ public class MainFrame extends JFrame {
                     );
 
                     infoPanel.setStatus(
-                            "Route Found"
+                            "✅ Route Found"
                     );
 
                     infoPanel.log(
-                            "Route Found for "
+                            "🧭 Route Found for "
                                     + user
                     );
 
@@ -125,7 +129,7 @@ public class MainFrame extends JFrame {
 
             String result = BFSTraversal.bfs(graph, s);
 
-            infoPanel.log(result);
+            infoPanel.log("🔍 " + result);
         });
 
         controlPanel.dfsBtn.addActionListener(e -> {
@@ -134,12 +138,12 @@ public class MainFrame extends JFrame {
 
             String result = DFSTraversal.dfs(graph, s);
 
-            infoPanel.log(result);
+            infoPanel.log("📡 " + result);
         });
         // BLOCK ROAD
         controlPanel.blockBtn.addActionListener(e -> {
 
-            infoPanel.log("Road Block Activated!");
+            infoPanel.log("🚧 Road Block Activated!");
         });
 
         // RESET
@@ -156,6 +160,37 @@ public class MainFrame extends JFrame {
 
         setVisible(true);
     }
+
+    private Image createAppIcon() {
+
+        BufferedImage icon =
+                new BufferedImage(32, 32, BufferedImage.TYPE_INT_ARGB);
+
+        Graphics2D g2 = icon.createGraphics();
+
+        g2.setRenderingHint(
+                RenderingHints.KEY_ANTIALIASING,
+                RenderingHints.VALUE_ANTIALIAS_ON
+        );
+
+        // Background circle (road sign style)
+        g2.setColor(new Color(52,152,219));
+        g2.fillOval(0,0,32,32);
+
+        // Draw a simple "road" line through the circle
+        g2.setColor(Color.WHITE);
+        g2.setStroke(new BasicStroke(4));
+        g2.drawLine(6,22,26,10);
+
+        // Small dot for a "node" on the road
+        g2.setColor(new Color(46,204,113));
+        g2.fillOval(20,8,6,6);
+
+        g2.dispose();
+
+        return icon;
+    }
+
     public ControlPanel getControlPanel() {
         return controlPanel;
     }

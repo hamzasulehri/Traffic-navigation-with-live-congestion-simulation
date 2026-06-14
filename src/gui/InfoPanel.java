@@ -1,6 +1,7 @@
 package gui;
 
 import javax.swing.*;
+import javax.swing.border.*;
 import java.awt.*;
 
 public class InfoPanel extends JPanel {
@@ -12,6 +13,29 @@ public class InfoPanel extends JPanel {
 
     private JTextArea logArea;
 
+    // =====================================================================
+    // SIZE SETTINGS - change these numbers to make text/icons bigger or smaller
+    // =====================================================================
+
+    // Font size for normal text (User, Route, Cost, Status, log text)
+    private static final int FONT_SIZE_NORMAL = 20;
+
+    // Font size for header bars ("Info Panel", "Event Log")
+    private static final int FONT_SIZE_HEADER = 25;
+
+    // Icon size (width and height in pixels) for User/Route/Cost/Status icons
+    private static final int ICON_SIZE = 30;
+
+    // Icon size for header bar icons
+    private static final int HEADER_ICON_SIZE = 35;
+
+
+    private static final Font FONT_NORMAL =
+            new Font("Times New Roman", Font.PLAIN, FONT_SIZE_NORMAL);
+
+    private static final Font FONT_HEADER =
+            new Font("Times New Roman", Font.BOLD, FONT_SIZE_HEADER);
+
     public InfoPanel() {
 
         setPreferredSize(
@@ -22,10 +46,37 @@ public class InfoPanel extends JPanel {
                 new BorderLayout()
         );
 
+        // Plain line border around the whole panel (header bar acts as the title)
+        setBorder(
+                BorderFactory.createLineBorder(
+                        new Color(46,204,113), 2
+                )
+        );
+
+        // ----- HEADER BAR (replaces old TitledBorder text) -----
+        JLabel header = UIUtils.createHeader(
+                "Info Panel",
+                "info_panel.png",
+                new Color(46,204,113),
+                FONT_HEADER,
+                HEADER_ICON_SIZE
+        );
+
+        add(header, BorderLayout.NORTH);
+
+        // ----- CONTENT AREA -----
+        JPanel content = new JPanel(
+                new BorderLayout()
+        );
+
         JPanel topPanel =
                 new JPanel(
-                        new GridLayout(4,1)
+                        new GridLayout(4,1,5,5)
                 );
+
+        topPanel.setBorder(
+                new EmptyBorder(10,10,10,10)
+        );
 
         userLabel =
                 new JLabel("User:");
@@ -39,25 +90,61 @@ public class InfoPanel extends JPanel {
         statusLabel =
                 new JLabel("Status:");
 
+        userLabel.setFont(FONT_NORMAL);
+        routeLabel.setFont(FONT_NORMAL);
+        costLabel.setFont(FONT_NORMAL);
+        statusLabel.setFont(FONT_NORMAL);
+
+        // Replace these file names with your own icon file names
+        // placed in src/resources/icons/
+        setLabelIcon(userLabel, "username.png");
+        setLabelIcon(routeLabel, "route.png");
+        setLabelIcon(costLabel, "cost.png");
+        setLabelIcon(statusLabel, "status.png");
+
         topPanel.add(userLabel);
         topPanel.add(routeLabel);
         topPanel.add(costLabel);
         topPanel.add(statusLabel);
+
+        content.add(topPanel, BorderLayout.NORTH);
+
+        // ----- EVENT LOG SECTION (its own header + scroll area) -----
+        JPanel logWrapper = new JPanel(
+                new BorderLayout()
+        );
+
+        logWrapper.setBorder(
+                BorderFactory.createLineBorder(
+                        new Color(180,180,180), 1
+                )
+        );
+
+        JLabel logHeader = UIUtils.createHeader(
+                "Event Log",
+                "event_log.png",
+                new Color(149,165,166),
+                FONT_HEADER,
+                HEADER_ICON_SIZE
+        );
+
+        logWrapper.add(logHeader, BorderLayout.NORTH);
 
         logArea =
                 new JTextArea();
 
         logArea.setEditable(false);
 
-        add(
-                topPanel,
-                BorderLayout.NORTH
-        );
+        logArea.setFont(FONT_NORMAL);
 
-        add(
+        logWrapper.add(
                 new JScrollPane(logArea),
                 BorderLayout.CENTER
         );
+
+        content.add(logWrapper, BorderLayout.CENTER);
+
+        add(content, BorderLayout.CENTER);
     }
 
     public void setUser(String user) {
@@ -90,5 +177,15 @@ public class InfoPanel extends JPanel {
 
     public void clear() {
         logArea.setText("");
+    }
+
+    private void setLabelIcon(JLabel label, String iconFileName) {
+
+        ImageIcon icon = UIUtils.loadIcon(iconFileName, ICON_SIZE, ICON_SIZE);
+
+        if (icon != null) {
+            label.setIcon(icon);
+            label.setIconTextGap(8);
+        }
     }
 }

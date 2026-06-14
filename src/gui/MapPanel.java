@@ -1,6 +1,7 @@
 package gui;
 
 import javax.swing.*;
+import javax.swing.border.*;
 import java.awt.*;
 import java.util.List;
 
@@ -8,13 +9,61 @@ public class MapPanel extends JPanel {
 
     private List<String> highlightedPath;
 
+    // =====================================================================
+    // SIZE SETTINGS - change these numbers to make text/icons bigger or smaller
+    // =====================================================================
+
+    // Font size for node labels (A, B, C, D) drawn on the map
+    private static final int NODE_FONT_SIZE = 20;
+
+    // Font size for the header bar ("City Map")
+    private static final int FONT_SIZE_HEADER = 25;
+
+    // Icon size for the header bar icon
+    private static final int HEADER_ICON_SIZE = 30;
+
+    // Vertical space reserved for the header bar so the map drawing
+    // doesn't overlap it. Increase this if you increase header font/icon size.
+    private static final int Y_OFFSET = 50;
+
+    // =====================================================================
+
+    private static final Font NODE_FONT =
+            new Font("Times New Roman", Font.BOLD, NODE_FONT_SIZE);
+
+    private static final Font FONT_HEADER =
+            new Font("Times New Roman", Font.BOLD, FONT_SIZE_HEADER);
+
     public void setPath(List<String> path) {
         this.highlightedPath = path;
         repaint();
     }
 
     public MapPanel() {
+
         setBackground(new Color(245,245,245));
+
+        setLayout(
+                new BorderLayout()
+        );
+
+        // Plain line border around the whole panel (header bar acts as the title)
+        setBorder(
+                BorderFactory.createLineBorder(
+                        new Color(120,120,120), 2
+                )
+        );
+
+        // ----- HEADER BAR (replaces old TitledBorder text) -----
+        JLabel header = UIUtils.createHeader(
+                "City Map",
+                "citymap.png",
+                new Color(52,73,94),
+                FONT_HEADER,
+                HEADER_ICON_SIZE
+        );
+
+        add(header, BorderLayout.NORTH);
     }
 
     @Override
@@ -63,7 +112,7 @@ public class MapPanel extends JPanel {
             ));
         }
 
-        g2.drawLine(x1,y1,x2,y2);
+        g2.drawLine(x1, y1 + Y_OFFSET, x2, y2 + Y_OFFSET);
     }
 
     private boolean isRoadInPath(
@@ -97,6 +146,8 @@ public class MapPanel extends JPanel {
 
     private void drawNode(Graphics2D g2,int x,int y,String name) {
 
+        int drawY = y + Y_OFFSET;
+
         g2.setColor(
                 new Color(
                         52,
@@ -104,10 +155,10 @@ public class MapPanel extends JPanel {
                         219
                 )
         );
-        g2.fillOval(x-18,y-18,36,36);
+        g2.fillOval(x-18, drawY-18, 36, 36);
 
         g2.setColor(Color.WHITE);
-        g2.setFont(new Font("Segoe UI", Font.BOLD, 14));
-        g2.drawString(name,x-5,y+5);
+        g2.setFont(NODE_FONT);
+        g2.drawString(name, x-5, drawY+5);
     }
 }
