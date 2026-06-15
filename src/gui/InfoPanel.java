@@ -13,6 +13,7 @@ public class InfoPanel extends JPanel {
 
     private JTextArea logArea;
 
+
     // Font size for normal text (User, Route, Cost, Status, log text)
     private static final int FONT_SIZE_NORMAL = 20;
 
@@ -24,6 +25,7 @@ public class InfoPanel extends JPanel {
 
     // Icon size for header bar icons
     private static final int HEADER_ICON_SIZE = 35;
+
 
 
     private static final Font FONT_NORMAL =
@@ -48,7 +50,7 @@ public class InfoPanel extends JPanel {
                 )
         );
 
-
+        // HEADER BAR (replaces old TitledBorder text)
         JLabel header = UIUtils.createHeader(
                 "Info Panel",
                 "info_panel.png",
@@ -90,7 +92,8 @@ public class InfoPanel extends JPanel {
         costLabel.setFont(FONT_NORMAL);
         statusLabel.setFont(FONT_NORMAL);
 
-        setLabelIcon(userLabel, "username.png");
+
+        setLabelIcon(userLabel, "user.png");
         setLabelIcon(routeLabel, "route.png");
         setLabelIcon(costLabel, "cost.png");
         setLabelIcon(statusLabel, "status.png");
@@ -168,8 +171,13 @@ public class InfoPanel extends JPanel {
     }
 
     public void clear() {
+        userLabel.setText("User:");
+        routeLabel.setText("Route:");
+        costLabel.setText("Cost:");
+        statusLabel.setText("Status:");
         logArea.setText("");
     }
+
 
     private void setLabelIcon(JLabel label, String iconFileName) {
 
