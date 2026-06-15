@@ -9,10 +9,6 @@ public class MapPanel extends JPanel {
 
     private List<String> highlightedPath;
 
-    // =====================================================================
-    // SIZE SETTINGS - change these numbers to make text/icons bigger or smaller
-    // =====================================================================
-
     // Font size for node labels (A, B, C, D) drawn on the map
     private static final int NODE_FONT_SIZE = 20;
 
@@ -22,11 +18,8 @@ public class MapPanel extends JPanel {
     // Icon size for the header bar icon
     private static final int HEADER_ICON_SIZE = 30;
 
-    // Vertical space reserved for the header bar so the map drawing
-    // doesn't overlap it. Increase this if you increase header font/icon size.
     private static final int Y_OFFSET = 50;
 
-    // =====================================================================
 
     private static final Font NODE_FONT =
             new Font("Times New Roman", Font.BOLD, NODE_FONT_SIZE);
@@ -54,7 +47,7 @@ public class MapPanel extends JPanel {
                 )
         );
 
-        // ----- HEADER BAR (replaces old TitledBorder text) -----
+        // HEADER BAR (replaces old TitledBorder text)
         JLabel header = UIUtils.createHeader(
                 "City Map",
                 "citymap.png",

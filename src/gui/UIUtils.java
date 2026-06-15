@@ -4,18 +4,8 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 
-/**
- * Shared helper methods used across all panels.
- */
 public class UIUtils {
 
-    /**
-     * Loads an icon image from resources/icons and scales it to the given size.
-     * Returns null if the image cannot be found, so the app won't crash
-     * if an icon file is missing (it just prints which file is missing).
-     *
-     * Place icon files inside: src/resources/icons/
-     */
     public static ImageIcon loadIcon(String fileName, int width, int height) {
 
         java.net.URL imgUrl =

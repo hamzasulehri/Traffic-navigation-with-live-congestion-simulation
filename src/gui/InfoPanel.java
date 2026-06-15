@@ -13,10 +13,6 @@ public class InfoPanel extends JPanel {
 
     private JTextArea logArea;
 
-    // =====================================================================
-    // SIZE SETTINGS - change these numbers to make text/icons bigger or smaller
-    // =====================================================================
-
     // Font size for normal text (User, Route, Cost, Status, log text)
     private static final int FONT_SIZE_NORMAL = 20;
 
@@ -46,14 +42,13 @@ public class InfoPanel extends JPanel {
                 new BorderLayout()
         );
 
-        // Plain line border around the whole panel (header bar acts as the title)
         setBorder(
                 BorderFactory.createLineBorder(
                         new Color(46,204,113), 2
                 )
         );
 
-        // ----- HEADER BAR (replaces old TitledBorder text) -----
+
         JLabel header = UIUtils.createHeader(
                 "Info Panel",
                 "info_panel.png",
@@ -95,8 +90,6 @@ public class InfoPanel extends JPanel {
         costLabel.setFont(FONT_NORMAL);
         statusLabel.setFont(FONT_NORMAL);
 
-        // Replace these file names with your own icon file names
-        // placed in src/resources/icons/
         setLabelIcon(userLabel, "username.png");
         setLabelIcon(routeLabel, "route.png");
         setLabelIcon(costLabel, "cost.png");
@@ -109,7 +102,6 @@ public class InfoPanel extends JPanel {
 
         content.add(topPanel, BorderLayout.NORTH);
 
-        // ----- EVENT LOG SECTION (its own header + scroll area) -----
         JPanel logWrapper = new JPanel(
                 new BorderLayout()
         );

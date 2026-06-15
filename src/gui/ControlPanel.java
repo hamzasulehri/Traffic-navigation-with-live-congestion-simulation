@@ -19,10 +19,6 @@ public class ControlPanel extends JPanel {
     public JButton blockBtn;
     public JButton resetBtn;
 
-    // =====================================================================
-    // SIZE SETTINGS - change these numbers to make text/icons bigger or smaller
-    // =====================================================================
-
     // Font size for normal text (labels, fields, buttons)
     private static final int FONT_SIZE_NORMAL = 20;
 
@@ -41,7 +37,7 @@ public class ControlPanel extends JPanel {
     // Icon size for the panel header bar icon
     private static final int HEADER_ICON_SIZE = 35;
 
-    // =====================================================================
+
 
     private static final Font FONT_NORMAL =
             new Font("Times New Roman", Font.PLAIN, FONT_SIZE_NORMAL);
@@ -62,14 +58,14 @@ public class ControlPanel extends JPanel {
                 new BorderLayout()
         );
 
-        // Plain line border around the whole panel (header bar acts as the title)
+
         setBorder(
                 BorderFactory.createLineBorder(
                         new Color(52,152,219), 2
                 )
         );
 
-        // ----- HEADER BAR (replaces old TitledBorder text) -----
+
         JLabel header = UIUtils.createHeader(
                 "Control Panel",
                 "control_panel.png",

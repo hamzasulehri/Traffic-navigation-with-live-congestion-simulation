@@ -18,7 +18,7 @@ public class MainFrame extends JFrame {
 
     public MainFrame() {
 
-        setTitle("🚦 Smart Traffic Navigation System");
+        setTitle(" Smart Traffic Navigation System");
         setSize(1300,800);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
@@ -89,7 +89,7 @@ public class MainFrame extends JFrame {
                     if(route == null) {
 
                         infoPanel.setStatus(
-                                "⚠ No Route Found"
+                                " No Route Found"
                         );
 
                         return;
@@ -109,11 +109,11 @@ public class MainFrame extends JFrame {
                     );
 
                     infoPanel.setStatus(
-                            "✅ Route Found"
+                            "Route Found"
                     );
 
                     infoPanel.log(
-                            "🧭 Route Found for "
+                            " Route Found for "
                                     + user
                     );
 
@@ -138,12 +138,12 @@ public class MainFrame extends JFrame {
 
             String result = DFSTraversal.dfs(graph, s);
 
-            infoPanel.log("📡 " + result);
+            infoPanel.log(" " + result);
         });
         // BLOCK ROAD
         controlPanel.blockBtn.addActionListener(e -> {
 
-            infoPanel.log("🚧 Road Block Activated!");
+            infoPanel.log("Road Block Activated!");
         });
 
         // RESET
