@@ -53,16 +53,4 @@ public class RouteHistory {
 
         return history.peek();
     }
-
-    public void showHistory() {
-
-        System.out.println(
-                "\nRoute History:"
-        );
-
-        for(Route route : history) {
-
-            System.out.println(route);
-        }
-    }
 }

@@ -48,26 +48,6 @@ public class CityGraph {
                 .add(new Edge(source, weight));
     }
 
-    public void printGraph() {
-
-        for(Node node : adjacencyList.keySet()) {
-
-            System.out.print(node.getName() + " -> ");
-
-            for(Edge edge : adjacencyList.get(node)) {
-
-                System.out.print(
-                        edge.getDestination().getName()
-                                + "("
-                                + edge.getWeight()
-                                + ") "
-                );
-            }
-
-            System.out.println();
-        }
-    }
-
     public Node getNode(String name) {
         return nodes.get(name);
     }
