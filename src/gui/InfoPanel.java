@@ -10,6 +10,7 @@ public class InfoPanel extends JPanel {
     private JLabel routeLabel;
     private JLabel costLabel;
     private JLabel statusLabel;
+    private JLabel congestionLabel;
 
     private JTextArea logArea;
 
@@ -68,7 +69,7 @@ public class InfoPanel extends JPanel {
 
         JPanel topPanel =
                 new JPanel(
-                        new GridLayout(4,1,5,5)
+                        new GridLayout(5,1,5,5)
                 );
 
         topPanel.setBorder(
@@ -87,21 +88,27 @@ public class InfoPanel extends JPanel {
         statusLabel =
                 new JLabel("Status:");
 
+        congestionLabel =
+                new JLabel("Congested Roads: 0");
+
         userLabel.setFont(FONT_NORMAL);
         routeLabel.setFont(FONT_NORMAL);
         costLabel.setFont(FONT_NORMAL);
         statusLabel.setFont(FONT_NORMAL);
+        congestionLabel.setFont(FONT_NORMAL);
 
 
         setLabelIcon(userLabel, "user.png");
         setLabelIcon(routeLabel, "route.png");
         setLabelIcon(costLabel, "cost.png");
         setLabelIcon(statusLabel, "status.png");
+        setLabelIcon(congestionLabel, "congestion.png");
 
         topPanel.add(userLabel);
         topPanel.add(routeLabel);
         topPanel.add(costLabel);
         topPanel.add(statusLabel);
+        topPanel.add(congestionLabel);
 
         content.add(topPanel, BorderLayout.NORTH);
 
@@ -166,8 +173,36 @@ public class InfoPanel extends JPanel {
         );
     }
 
+    public void setCongestedRoads(int count) {
+        congestionLabel.setText(
+                "Congested Roads: " + count
+        );
+    }
+
     public void log(String text) {
         logArea.append(text + "\n");
+    }
+
+    /**
+     * Returns the full Event Log text exactly as shown on screen,
+     * used by the Save Log button to write it out to a .txt file.
+     */
+    public String getLogText() {
+        return logArea.getText();
+    }
+
+    /**
+     * Returns the current User / Route / Cost / Status / Congested Roads
+     * summary lines, used by the Save Log button so the saved file
+     * captures the full snapshot, not just the event history.
+     */
+    public String getSummaryText() {
+
+        return userLabel.getText() + "\n"
+                + routeLabel.getText() + "\n"
+                + costLabel.getText() + "\n"
+                + statusLabel.getText() + "\n"
+                + congestionLabel.getText() + "\n";
     }
 
     public void clear() {
@@ -175,6 +210,7 @@ public class InfoPanel extends JPanel {
         routeLabel.setText("Route:");
         costLabel.setText("Cost:");
         statusLabel.setText("Status:");
+        congestionLabel.setText("Congested Roads: 0");
         logArea.setText("");
     }
 

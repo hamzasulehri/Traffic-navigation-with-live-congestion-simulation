@@ -1,5 +1,7 @@
 package gui;
 
+import graph.*;
+
 import javax.swing.*;
 import javax.swing.border.*;
 import java.awt.*;
@@ -8,6 +10,10 @@ import java.util.List;
 public class MapPanel extends JPanel {
 
     private List<String> highlightedPath;
+
+    // Reference to the live city graph so the map can read current
+    // congestion / blocked status for every road and color it accordingly.
+    private CityGraph graph;
 
     // Font size for node labels (A, B, C, D) drawn on the map
     private static final int NODE_FONT_SIZE = 20;
@@ -20,6 +26,18 @@ public class MapPanel extends JPanel {
 
     private static final int Y_OFFSET = 50;
 
+    // ----- Congestion color legend -----
+    // Green  = no congestion, travel is fast
+    // Yellow = moderate congestion, some delay
+    // Red    = heavy congestion or road blocked
+    // Blue   = currently selected route from A to B
+    // Grey   = unknown / no graph data available for this road
+    private static final Color COLOR_CLEAR     = new Color(46,204,113);
+    private static final Color COLOR_CONGESTED = new Color(241,196,15);
+    private static final Color COLOR_BLOCKED   = new Color(231,76,60);
+    private static final Color COLOR_PATH      = new Color(52,152,219);
+    private static final Color COLOR_UNKNOWN   = new Color(120,120,120);
+
 
     private static final Font NODE_FONT =
             new Font("Times New Roman", Font.BOLD, NODE_FONT_SIZE);
@@ -29,6 +47,23 @@ public class MapPanel extends JPanel {
 
     public void setPath(List<String> path) {
         this.highlightedPath = path;
+        repaint();
+    }
+
+    /**
+     * Gives the map access to the live CityGraph so road colors can
+     * reflect real congestion / blocked state.
+     */
+    public void setGraph(CityGraph graph) {
+        this.graph = graph;
+        repaint();
+    }
+
+    /**
+     * Call this after any congestion change (block, simulate, restore)
+     * so the map redraws with the latest road colors.
+     */
+    public void refreshCongestion() {
         repaint();
     }
 
@@ -47,7 +82,7 @@ public class MapPanel extends JPanel {
                 )
         );
 
-        // HEADER BAR (replaces old TitledBorder text)
+        // ----- HEADER BAR (replaces old TitledBorder text) -----
         JLabel header = UIUtils.createHeader(
                 "City Map",
                 "citymap.png",
@@ -71,9 +106,6 @@ public class MapPanel extends JPanel {
                 RenderingHints.VALUE_ANTIALIAS_ON
         );
 
-        // draw roads
-        g2.setStroke(new BasicStroke(5));
-
         drawRoad(g2, "A","B",150,100,350,100);
         drawRoad(g2, "B","D",350,100,500,250);
         drawRoad(g2, "A","C",150,100,150,300);
@@ -89,23 +121,85 @@ public class MapPanel extends JPanel {
                           String a, String b,
                           int x1,int y1,int x2,int y2) {
 
-        if (highlightedPath != null &&
-                highlightedPath.contains(a) &&
-                highlightedPath.contains(b)) {
-            g2.setColor(new Color(
-                    46,
-                    204,
-                    113
-            ));
+        if (highlightedPath != null && isRoadInPath(a, b)) {
+
+            // Selected route is always shown in blue, on top of congestion colors
+            g2.setStroke(new BasicStroke(7));
+            g2.setColor(COLOR_PATH);
+
         } else {
-            g2.setColor(new Color(
-                    120,
-                    120,
-                    120
-            ));
+
+            g2.setStroke(new BasicStroke(5));
+            g2.setColor(getRoadColor(a, b));
         }
 
         g2.drawLine(x1, y1 + Y_OFFSET, x2, y2 + Y_OFFSET);
+    }
+
+    /**
+     * Looks up the live edge for this road and returns the color that
+     * represents its current congestion state.
+     */
+    private Color getRoadColor(String a, String b) {
+
+        Edge edge = findEdge(a, b);
+
+        if (edge == null) {
+            return COLOR_UNKNOWN;
+        }
+
+        if (edge.isBlocked()) {
+            return COLOR_BLOCKED;
+        }
+
+        if (edge.getWeight() > edge.getOriginalWeight()) {
+            return COLOR_CONGESTED;
+        }
+
+        return COLOR_CLEAR;
+    }
+
+    /**
+     * Finds the Edge object that connects node a to node b (checking
+     * both directions, since roads may only be stored one-way).
+     */
+    private Edge findEdge(String a, String b) {
+
+        if (graph == null) {
+            return null;
+        }
+
+        Edge edge = findEdgeOneWay(a, b);
+
+        if (edge != null) {
+            return edge;
+        }
+
+        return findEdgeOneWay(b, a);
+    }
+
+    private Edge findEdgeOneWay(String from, String to) {
+
+        Node fromNode = graph.getNode(from);
+
+        if (fromNode == null) {
+            return null;
+        }
+
+        List<Edge> edges = graph.getAdjacencyList().get(fromNode);
+
+        if (edges == null) {
+            return null;
+        }
+
+        for (Edge edge : edges) {
+
+            if (edge.getDestination().getName().equals(to)) {
+                return edge;
+            }
+        }
+
+        return null;
     }
 
     private boolean isRoadInPath(

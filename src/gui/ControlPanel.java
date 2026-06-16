@@ -16,8 +16,10 @@ public class ControlPanel extends JPanel {
     public JButton findRouteBtn;
     public JButton bfsBtn;
     public JButton dfsBtn;
+    public JButton simulateBtn;
     public JButton blockBtn;
     public JButton resetBtn;
+    public JButton saveLogBtn;
 
     // Font size for normal text (labels, fields, buttons)
     private static final int FONT_SIZE_NORMAL = 20;
@@ -130,6 +132,10 @@ public class ControlPanel extends JPanel {
                 createButton("Show DFS", "dfs.png",
                         new Color(241,196,15), new Color(212,172,13));
 
+        simulateBtn =
+                createButton("Simulate Congestion", "congestion.png",
+                        new Color(230,126,34), new Color(211,84,0));
+
         blockBtn =
                 createButton("Block Road", "block.png",
                         new Color(231,76,60), new Color(192,57,43));
@@ -137,6 +143,10 @@ public class ControlPanel extends JPanel {
         resetBtn =
                 createButton("Reset", "reset.png",
                         new Color(26,188,156), new Color(22,160,133));
+
+        saveLogBtn =
+                createButton("Save Log", "save.png",
+                        new Color(52,73,94), new Color(44,62,80));
 
         content.add(title);
 
@@ -152,8 +162,10 @@ public class ControlPanel extends JPanel {
         content.add(findRouteBtn);
         content.add(bfsBtn);
         content.add(dfsBtn);
+        content.add(simulateBtn);
         content.add(blockBtn);
         content.add(resetBtn);
+        content.add(saveLogBtn);
 
         add(content, BorderLayout.CENTER);
     }
